@@ -9,7 +9,35 @@
     </style>
   </head>
   <body>
-    <h2 id="title">Hello DOM</h2>
-    <script src="./js/index.js"></script>
+    <main>
+      <div class="container">
+        <h2>account login</h2>
+        <form>
+          <label>
+            <span>Username</span>
+            <input
+              type="text"
+              placeholder="Enter Username"
+              class="input-content"
+            />
+          </label>
+          <div>
+            <span>Password</span>
+            <div class="input-hide">
+              <input
+                type="text"
+                placeholder="Enter Password"
+                class="input-content"
+              />
+              <span>show</span>
+            </div>
+          </div>
+          <p>
+            Don't have an account? <a href="./signup/signup.html">Register</a>
+          </p>
+          <button type="submit">Login</button>
+        </form>
+      </div>
+    </main>
   </body>
 </html>
