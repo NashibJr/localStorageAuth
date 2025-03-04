@@ -65,7 +65,7 @@ form div span {
   cursor: pointer;
 }
 
-form button {
+button {
   padding: 15px;
   color: #fff;
   background-color: #000;

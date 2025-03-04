@@ -125,4 +125,9 @@ if (pathname !== "/src/home/home.html") {
 if (pathname === "/src/home/home.html") {
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   document.getElementById("user").innerHTML = loggedInUser.username;
+
+  document.getElementById("logoutbtn").addEventListener("click", () => {
+    localStorage.removeItem("loggedInUser");
+    window.location.href = "/src/index.html";
+  });
 }
