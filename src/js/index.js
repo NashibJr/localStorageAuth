@@ -4,7 +4,7 @@ const inputs = document.querySelectorAll(".input-content");
 
 const users = JSON.parse(localStorage.getItem("users"));
 
-console.log(users, "::::", pathname, "PPPP");
+console.log(users, ">>>>");
 
 const handlePasswordViewAndHide = () => {
   const text = showBtn.innerHTML;
@@ -25,6 +25,48 @@ showBtn.addEventListener("click", () => {
   handlePasswordViewAndHide();
 });
 
+const generateToken = () => {
+  const upperCaseChars = [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+  ];
+  const specialChars = ["&", "^", "%", "@", "*", "_"];
+  let lowerCaseChars = [];
+  // generating lowercase letters
+  for (let char of upperCaseChars) {
+    lowerCaseChars = [...lowerCaseChars, char.toLowerCase()];
+  }
+
+  // concatating arrays
+  const chars = [...upperCaseChars, ...lowerCaseChars, ...specialChars].join(
+    ""
+  );
+
+  // generating the token
+  let token = "";
+
+  for (let index = 0; index <= chars.length - 1; index++) {
+    let tokenIndex = Math.round(Math.random() * 100);
+    if (tokenIndex >= chars.length) {
+      tokenIndex = Math.ceil(Math.random() * 10) + 10;
+    }
+
+    token += chars[tokenIndex];
+  }
+
+  return token.slice(0, 20);
+};
+
 document.querySelector("form").addEventListener("submit", (event) => {
   event.preventDefault();
   const inputs = document.querySelectorAll("input");
@@ -37,8 +79,25 @@ document.querySelector("form").addEventListener("submit", (event) => {
   if (pathname === "/src/index.html") {
     if (!exists) {
       alert("This account is not recognized");
+
       return;
     }
+    // checking for the password incase the user exists
+    if (exists.password !== person.password) {
+      alert("Incorrectt password, please try again.");
+
+      return;
+    }
+
+    const token = generateToken();
+    window.location.href = "/src/home/home.html";
+    localStorage.setItem(
+      "loggedInUser",
+      JSON.stringify({ username: exists.username, token })
+    );
+    return {
+      token,
+    };
   } else {
     if (exists) {
       alert(`${exists.username} already exists`);
@@ -52,6 +111,7 @@ document.querySelector("form").addEventListener("submit", (event) => {
       for (let input of inputs) {
         input.value = "";
       }
+      window.location.href = "/src/index.html";
     } else {
       console.log("An unexpected error has occured");
     }
