@@ -21,9 +21,11 @@ const handlePasswordViewAndHide = () => {
   }
 };
 
-showBtn.addEventListener("click", () => {
-  handlePasswordViewAndHide();
-});
+if (pathname !== "/src/home/home.html") {
+  showBtn.addEventListener("click", () => {
+    handlePasswordViewAndHide();
+  });
+}
 
 const generateToken = () => {
   const upperCaseChars = [
@@ -67,53 +69,60 @@ const generateToken = () => {
   return token.slice(0, 20);
 };
 
-document.querySelector("form").addEventListener("submit", (event) => {
-  event.preventDefault();
-  const inputs = document.querySelectorAll("input");
-  let person = {};
-  person = Object.assign(person, {
-    username: inputs[0].value,
-    password: inputs[1].value,
-  });
-  const exists = users?.find((user) => user.username === person.username);
-  if (pathname === "/src/index.html") {
-    if (!exists) {
-      alert("This account is not recognized");
+if (pathname !== "/src/home/home.html") {
+  document.querySelector("form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const inputs = document.querySelectorAll("input");
+    let person = {};
+    person = Object.assign(person, {
+      username: inputs[0].value,
+      password: inputs[1].value,
+    });
+    const exists = users?.find((user) => user.username === person.username);
+    if (pathname === "/src/index.html") {
+      if (!exists) {
+        alert("This account is not recognized");
 
-      return;
-    }
-    // checking for the password incase the user exists
-    if (exists.password !== person.password) {
-      alert("Incorrectt password, please try again.");
-
-      return;
-    }
-
-    const token = generateToken();
-    window.location.href = "/src/home/home.html";
-    localStorage.setItem(
-      "loggedInUser",
-      JSON.stringify({ username: exists.username, token })
-    );
-    return {
-      token,
-    };
-  } else {
-    if (exists) {
-      alert(`${exists.username} already exists`);
-      return;
-    }
-    users.push(person);
-    localStorage.setItem("users", JSON.stringify(users));
-    if (person.username !== "") {
-      alert(`${person.username} is successfully registered`);
-      person = {};
-      for (let input of inputs) {
-        input.value = "";
+        return;
       }
-      window.location.href = "/src/index.html";
+      // checking for the password incase the user exists
+      if (exists.password !== person.password) {
+        alert("Incorrectt password, please try again.");
+
+        return;
+      }
+
+      const token = generateToken();
+      window.location.href = "/src/home/home.html";
+      localStorage.setItem(
+        "loggedInUser",
+        JSON.stringify({ username: exists.username, token })
+      );
+      return {
+        token,
+      };
     } else {
-      console.log("An unexpected error has occured");
+      if (exists) {
+        alert(`${exists.username} already exists`);
+        return;
+      }
+      users.push(person);
+      localStorage.setItem("users", JSON.stringify(users));
+      if (person.username !== "") {
+        alert(`${person.username} is successfully registered`);
+        person = {};
+        for (let input of inputs) {
+          input.value = "";
+        }
+        window.location.href = "/src/index.html";
+      } else {
+        console.log("An unexpected error has occured");
+      }
     }
-  }
-});
+  });
+}
+
+if (pathname === "/src/home/home.html") {
+  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+  document.getElementById("user").innerHTML = loggedInUser.username;
+}
