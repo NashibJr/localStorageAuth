@@ -4,7 +4,7 @@ const inputs = document.querySelectorAll(".input-content");
 
 const users = JSON.parse(localStorage.getItem("users"));
 
-console.log(users, "::::");
+console.log(users, "::::", pathname, "PPPP");
 
 const handlePasswordViewAndHide = () => {
   const text = showBtn.innerHTML;
@@ -21,19 +21,25 @@ const handlePasswordViewAndHide = () => {
   }
 };
 
-if (pathname === "/src/signup/signup.html") {
-  showBtn.addEventListener("click", () => {
-    handlePasswordViewAndHide();
+showBtn.addEventListener("click", () => {
+  handlePasswordViewAndHide();
+});
+
+document.querySelector("form").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const inputs = document.querySelectorAll("input");
+  let person = {};
+  person = Object.assign(person, {
+    username: inputs[0].value,
+    password: inputs[1].value,
   });
-  document.querySelector("form").addEventListener("submit", (event) => {
-    event.preventDefault();
-    const inputs = document.querySelectorAll("input");
-    let person = {};
-    person = Object.assign(person, {
-      username: inputs[0].value,
-      password: inputs[1].value,
-    });
-    const exists = users?.find((user) => user.username === person.username);
+  const exists = users?.find((user) => user.username === person.username);
+  if (pathname === "/src/index.html") {
+    if (!exists) {
+      alert("This account is not recognized");
+      return;
+    }
+  } else {
     if (exists) {
       alert(`${exists.username} already exists`);
       return;
@@ -49,5 +55,5 @@ if (pathname === "/src/signup/signup.html") {
     } else {
       console.log("An unexpected error has occured");
     }
-  });
-}
+  }
+});
